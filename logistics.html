@@ -1,0 +1,1984 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Logistics Analytics | Nithya A</title>
+
+  <meta name="description" content="Explore Nithya A's Logistics Analytics Power BI project, featuring delivery performance, fleet and fuel efficiency, maintenance, safety analytics, SQL Server, and DAX.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       THEME AND GLOBAL STYLES
+    ========================== */
+
+    :root {
+      --bg: #07071a;
+      --bg2: #0d0d24;
+      --card: #10102b;
+      --line: #1e1e44;
+      --purple: #7c3aed;
+      --purple2: #a855f7;
+      --glow: rgba(124, 58, 237, .35);
+      --text: #f4f4ff;
+      --muted: #9a9ac0;
+      --green: #86efac;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--purple2);
+      outline-offset: 4px;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 78px 0;
+    }
+
+    .section-heading {
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.65rem, 3vw, 2.2rem);
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 14px 0 10px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      max-width: 720px;
+      font-size: .94rem;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      padding: 4px 14px;
+      border-radius: 99px;
+      background: #1c1346;
+      color: #c4b5fd;
+      border: 1px solid #3b2a82;
+    }
+
+    .grad {
+      background: linear-gradient(90deg, var(--purple), var(--purple2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: .88rem;
+      border: 1px solid var(--purple);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn.primary {
+      background: var(--purple);
+      color: #fff;
+      box-shadow: 0 8px 28px var(--glow);
+    }
+
+    .btn.primary:hover {
+      background: #6d28d9;
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: #c4b5fd;
+    }
+
+    .btn.ghost:hover {
+      background: #1c1346;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 25px;
+    }
+
+    /* =========================
+       NAVIGATION
+    ========================== */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(7, 7, 26, .88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    nav {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .95rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .logo-icon {
+      width: 37px;
+      height: 37px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--purple), var(--purple2));
+      font-size: .9rem;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 23px;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    /* =========================
+       HERO
+    ========================== */
+
+    .hero {
+      padding: 100px 0 78px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      top: -190px;
+      right: -100px;
+      background: radial-gradient(circle, rgba(124, 58, 237, .17), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      align-items: center;
+      gap: 45px;
+    }
+
+    .eyebrow {
+      color: #c4b5fd;
+      font-size: .83rem;
+      margin-bottom: 17px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.3rem, 5vw, 4.2rem);
+      line-height: 1.17;
+      letter-spacing: -1.8px;
+      margin-bottom: 22px;
+      font-weight: 700;
+    }
+
+    .hero h1 span {
+      display: block;
+    }
+
+    .hero-description {
+      color: var(--muted);
+      font-size: .98rem;
+      max-width: 620px;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-visual {
+      position: relative;
+      padding: 28px;
+      border: 1px solid #30245c;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(168, 85, 247, .14), transparent 45%),
+        linear-gradient(145deg, #141333, #0b0b20);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+    }
+
+    .visual-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .visual-top strong {
+      font-size: .92rem;
+    }
+
+    .live-label {
+      color: var(--green);
+      font-size: .68rem;
+      border: 1px solid rgba(134, 239, 172, .3);
+      background: rgba(134, 239, 172, .06);
+      padding: 4px 9px;
+      border-radius: 99px;
+    }
+
+    .mini-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-kpi {
+      padding: 17px;
+      background: rgba(255, 255, 255, .025);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .mini-kpi span {
+      color: var(--muted);
+      font-size: .74rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .mini-kpi strong {
+      font-size: 1.15rem;
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .visual-note {
+      margin-top: 17px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .75rem;
+    }
+
+    /* =========================
+       PROJECT OVERVIEW
+    ========================== */
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 22px;
+    }
+
+    .overview-text p {
+      color: var(--muted);
+      font-size: .91rem;
+      margin-top: 14px;
+    }
+
+    .objective-list {
+      list-style: none;
+      margin-top: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .objective-list li {
+      display: flex;
+      gap: 11px;
+      font-size: .86rem;
+      color: #deddf6;
+    }
+
+    .check {
+      color: #c4b5fd;
+      flex-shrink: 0;
+    }
+
+    .stack-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .stack-item {
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: #191735;
+      border: 1px solid #30245c;
+      color: #d8ccff;
+      font-size: .77rem;
+    }
+
+    /* =========================
+       PROJECT WORKFLOW
+    ========================== */
+
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .workflow-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .workflow-card:hover {
+      border-color: #6941c6;
+      transform: translateY(-3px);
+    }
+
+    .workflow-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #e9d5ff;
+      background: #25164d;
+      border: 1px solid #4c2c85;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .workflow-card h3 {
+      font-size: .95rem;
+      margin-bottom: 9px;
+    }
+
+    .workflow-card p {
+      color: var(--muted);
+      font-size: .79rem;
+    }
+
+    /* =========================
+       DASHBOARD GALLERY
+    ========================== */
+
+    .gallery-section {
+      background: linear-gradient(180deg, transparent, rgba(20, 12, 50, .24), transparent);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .gallery-card {
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-5px);
+      border-color: #7145ce;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, .22);
+    }
+
+    .gallery-image-button {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: #09091c;
+      cursor: zoom-in;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .gallery-image-button img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #09091c;
+      transition: transform .35s ease;
+    }
+
+    .gallery-card:hover .gallery-image-button img {
+      transform: scale(1.025);
+    }
+
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: white;
+      font-size: .82rem;
+      font-weight: 500;
+      background: rgba(7, 7, 26, .55);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+
+    .gallery-card:hover .image-overlay,
+    .gallery-image-button:focus-visible .image-overlay {
+      opacity: 1;
+    }
+
+    .gallery-content {
+      padding: 22px;
+    }
+
+    .gallery-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .page-number {
+      color: #c4b5fd;
+      font-size: .72rem;
+      background: #201642;
+      border: 1px solid #3b2a66;
+      border-radius: 6px;
+      padding: 4px 8px;
+    }
+
+    .page-type {
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    .gallery-content h3 {
+      font-size: 1.08rem;
+      margin-bottom: 9px;
+      font-weight: 600;
+    }
+
+    .gallery-content p {
+      font-size: .83rem;
+      color: var(--muted);
+    }
+
+    .metric-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 16px;
+    }
+
+    .metric-list span {
+      color: #ddd6fe;
+      font-size: .7rem;
+      padding: 5px 9px;
+      border-radius: 7px;
+      background: rgba(124, 58, 237, .09);
+      border: 1px solid rgba(124, 58, 237, .2);
+    }
+
+    .view-report {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      background: none;
+      color: #c4b5fd;
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: pre-line;
+    }
+
+    .view-report:hover {
+      color: white;
+      
+    }
+
+    /* =========================
+       DATA MODEL
+    ========================== */
+
+    .model-layout {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .model-preview {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      overflow: hidden;
+      background: #09091c;
+    }
+
+    .model-preview button {
+      width: 100%;
+      display: block;
+      border: 0;
+      padding: 0;
+      cursor: zoom-in;
+      background: transparent;
+    }
+
+    .model-preview img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      background: #09091c;
+    }
+
+    .model-copy h3 {
+      font-size: 1.3rem;
+      margin: 14px 0;
+    }
+
+    .model-copy p {
+      color: var(--muted);
+      font-size: .87rem;
+      margin-bottom: 14px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: grid;
+      gap: 11px;
+      margin-top: 20px;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 10px;
+      font-size: .84rem;
+      color: #deddf6;
+    }
+
+    /* =========================
+       DAX AND INSIGHTS
+    ========================== */
+
+    .dax-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .dax-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 22px;
+    }
+
+    .dax-card h3 {
+      font-size: .94rem;
+      margin-bottom: 9px;
+    }
+
+    .dax-card p {
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .dax-label {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: .7rem;
+      color: #c4b5fd;
+      border-radius: 6px;
+      background: #1c1346;
+      padding: 4px 8px;
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .insight-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 22px;
+    }
+
+    .insight-icon {
+      width: 39px;
+      height: 39px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #25164d;
+      color: #d8b4fe;
+    }
+
+    .insight-card h3 {
+      font-size: .9rem;
+      margin-bottom: 6px;
+    }
+
+    .insight-card p {
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    /* =========================
+       PROJECT FOOTER
+    ========================== */
+
+    .project-cta {
+      text-align: center;
+      border: 1px solid #30245c;
+      border-radius: 20px;
+      padding: 44px 25px;
+      background:
+        radial-gradient(circle at top, rgba(124, 58, 237, .14), transparent 65%),
+        var(--bg2);
+    }
+
+    .project-cta h2 {
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      margin: 12px 0;
+    }
+
+    .project-cta p {
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto 24px;
+      font-size: .9rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .back-top {
+      color: #c4b5fd;
+    }
+
+    /* =========================
+       IMAGE LIGHTBOX / MODAL
+    ========================== */
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(3, 3, 14, .94);
+      backdrop-filter: blur(12px);
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-dialog {
+      width: min(1250px, 100%);
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      background: #0d0d24;
+      border: 1px solid #39305f;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, .5);
+    }
+
+    .lightbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 17px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lightbox-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .close-lightbox {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border: 1px solid #39305f;
+      background: #191735;
+      color: white;
+      border-radius: 9px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .close-lightbox:hover {
+      background: #30245c;
+    }
+
+    .lightbox-image-wrap {
+      min-height: 100px;
+      flex: 1;
+      overflow: auto;
+      background: #070714;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-image-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 67vh;
+      object-fit: contain;
+    }
+
+    .lightbox-description {
+      padding: 18px 22px 22px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .lightbox-description strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: .94rem;
+    }
+
+    .lightbox-hint {
+      color: #77779f;
+      font-size: .72rem;
+      margin-top: 8px;
+    }
+
+    /* Image fallback */
+    .image-fallback {
+      display: none;
+      min-height: 180px;
+      padding: 25px;
+      color: #c4b5fd;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 9px;
+      font-size: .85rem;
+    }
+
+    .image-fallback small {
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    /* =========================
+       RESPONSIVE DESIGN
+    ========================== */
+
+    @media (max-width: 900px) {
+      .nav-links {
+        gap: 13px;
+        font-size: .74rem;
+      }
+
+      .hero-grid,
+      .overview-grid,
+      .model-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        max-width: 600px;
+      }
+
+      .workflow-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .dax-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 650px) {
+      .wrap {
+        width: min(100% - 30px, 1120px);
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      nav {
+        min-height: 64px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 65px 0 50px;
+      }
+
+      .hero h1 {
+        letter-spacing: -1px;
+      }
+
+      .hero-grid {
+        gap: 30px;
+      }
+
+      .hero-visual {
+        padding: 19px;
+      }
+
+      .gallery-grid,
+      .insights-grid,
+      .dax-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-content {
+        padding: 18px;
+      }
+
+      .lightbox {
+        padding: 8px;
+      }
+
+      .lightbox-dialog {
+        max-height: 96vh;
+      }
+
+      .lightbox-header {
+        padding: 12px 14px;
+      }
+
+      .lightbox-description {
+        padding: 14px;
+      }
+
+      .lightbox-image-wrap img {
+        max-height: 58vh;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <header>
+    <div class="wrap">
+      <nav aria-label="Main navigation">
+
+        <a href="#top" class="logo">
+          <span class="logo-icon">NA</span>
+          <span>Nithya A <span class="grad">/ Logistics Analytics</span></span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#overview">Overview</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#dashboards">Dashboards</a>
+          <a href="#data-model">Data Model</a>
+          <a href="#insights">Insights</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+      </nav>
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <section class="hero">
+      <div class="wrap hero-grid">
+
+        <div>
+          <p class="eyebrow">POWER BI PROJECT · LOGISTICS ANALYTICS</p>
+
+          <h1>
+            Turning Logistics Data
+            <span class="grad">Into Actionable Insights.</span>
+          </h1>
+
+          <p class="hero-description">
+            An end-to-end business intelligence project that transforms
+            logistics data into interactive dashboards for monitoring
+            delivery performance, fleet and fuel efficiency, maintenance,
+            and safety.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#dashboards" class="btn primary">
+              Explore Dashboards ↗
+            </a>
+
+            <a href="#workflow" class="btn ghost">
+              View Project Workflow
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+
+          <div class="visual-top">
+            <strong>Logistics Analytics</strong>
+            <span class="live-label">POWER BI PROJECT</span>
+          </div>
+
+          <div class="mini-kpis">
+            <div class="mini-kpi">
+              <span>Report Pages</span>
+              <strong class="grad">05</strong>
+            </div>
+
+            <div class="mini-kpi">
+              <span>DAX Measures</span>
+              <strong class="grad">30+</strong>
+            </div>
+
+            <div class="mini-kpi">
+              <span>Data Source</span>
+              <strong>SQL Server</strong>
+            </div>
+
+            <div class="mini-kpi">
+              <span>Data Visualization</span>
+              <strong>Power BI</strong>
+            </div>
+          </div>
+
+          <p class="visual-note">
+            Interactive reporting · Data modelling · Business performance analysis
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================
+         PROJECT OVERVIEW
+    ========================== -->
+
+    <section id="overview">
+      <div class="wrap">
+
+        <div class="section-heading">
+          <span class="tag">01 / PROJECT OVERVIEW</span>
+          <h2>About the <span class="grad">Project</span></h2>
+          <p>
+            A business intelligence solution designed to help stakeholders
+            understand operational performance and identify areas for improvement.
+          </p>
+        </div>
+
+        <div class="overview-grid">
+
+          <div class="panel overview-text">
+            <h3>Business Problem</h3>
+
+            <p>
+              Logistics operations generate data across deliveries, vehicles,
+              fuel consumption, maintenance activities, and driver safety.
+              Without a consolidated analytical view, identifying operational
+              inefficiencies and monitoring performance can be difficult.
+            </p>
+
+            <p>
+              This project brings these operational areas together in Power BI
+              to support performance monitoring and data-driven decisions.
+            </p>
+
+            <ul class="objective-list">
+              <li>
+                <span class="check">✦</span>
+                <span>Monitor delivery performance and reliability.</span>
+              </li>
+              <li>
+                <span class="check">✦</span>
+                <span>Analyze fleet utilization and fuel efficiency.</span>
+              </li>
+              <li>
+                <span class="check">✦</span>
+                <span>Track maintenance activities and vehicle downtime.</span>
+              </li>
+              <li>
+                <span class="check">✦</span>
+                <span>Evaluate safety indicators and operational risks.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h3>Technology Stack</h3>
+
+            <p class="muted" style="font-size:.85rem;margin-top:10px">
+              Technologies used to prepare, model, analyze, and visualize the data.
+            </p>
+
+            <div class="stack-list">
+              <span class="stack-item">Power BI Desktop</span>
+              <span class="stack-item">SQL Server</span>
+              <span class="stack-item">Power Query</span>
+              <span class="stack-item">DAX</span>
+              <span class="stack-item">Data Modelling</span>
+              <span class="stack-item">Star Schema</span>
+              <span class="stack-item">Data Validation</span>
+              <span class="stack-item">Interactive Reports</span>
+            </div>
+
+            <div style="margin-top:27px;padding-top:20px;border-top:1px solid var(--line)">
+              <h3>Project Deliverables</h3>
+              <p class="muted" style="font-size:.84rem;margin-top:9px">
+                Five analytical report pages, a structured data model,
+                reusable DAX measures, and operational insights.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         WORKFLOW
+    ========================== -->
+
+    <section id="workflow">
+      <div class="wrap">
+
+        <div class="section-heading">
+          <span class="tag">02 / METHODOLOGY</span>
+          <h2>End-to-End <span class="grad">Workflow</span></h2>
+          <p>
+            From source data preparation to validated, interactive Power BI reporting.
+          </p>
+        </div>
+
+        <div class="workflow-grid">
+
+          <article class="workflow-card">
+            <div class="workflow-number">01</div>
+            <h3>Data Preparation</h3>
+            <p>
+              Used SQL Server to prepare the data and organize reporting-ready
+              tables and views.
+            </p>
+          </article>
+
+          <article class="workflow-card">
+            <div class="workflow-number">02</div>
+            <h3>Data Modelling</h3>
+            <p>
+              Designed a star-schema model and validated primary and foreign
+              key relationships.
+            </p>
+          </article>
+
+          <article class="workflow-card">
+            <div class="workflow-number">03</div>
+            <h3>DAX Development</h3>
+            <p>
+              Created 30+ DAX measures to support operational KPIs and
+              interactive analysis.
+            </p>
+          </article>
+
+          <article class="workflow-card">
+            <div class="workflow-number">04</div>
+            <h3>Dashboard Development</h3>
+            <p>
+              Built five report pages and checked the reporting logic and
+              outputs for consistency.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         DASHBOARD GALLERY
+    ========================== -->
+
+    <section id="dashboards" class="gallery-section">
+      <div class="wrap">
+
+        <div class="section-heading">
+          <span class="tag">03 / REPORT PAGES</span>
+          <h2>Dashboard <span class="grad">Gallery</span></h2>
+          <p>
+            Explore the five Power BI report pages in project order.
+            Click any dashboard image to open a larger preview and read
+            more about its purpose.
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+
+          <!-- PAGE 01 -->
+          <article class="gallery-card">
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Executive_Overview.png"
+              data-title="01 — Executive Overview"
+              data-description="Service reliability is the primary performance concern, with on-time service at 55.7% against the 95% target. 
+              Fuel accounts for approximately 92% of the operating costs tracked in this report. Management should prioritize reducing delivery delays, 
+              investigating high-cost fleet operations, improving maintenance efficiency, and preventing safety incidents.">
+
+              <img
+                src="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Executive_Overview.png"
+                alt="Power BI Executive Overview dashboard"
+                loading="lazy">
+
+              <span class="image-overlay">⌕ Click to enlarge</span>
+            </button>
+
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span class="page-number">PAGE 01</span>
+                <span class="page-type">Executive Reporting</span>
+              </div>
+
+              <h3>Executive Overview</h3>
+
+              <p>
+                A consolidated view of logistics KPIs, performance trends,
+                and key areas requiring management attention.
+              </p>
+
+              <div class="metric-list">
+                <span>KPI Monitoring</span>
+                <span>Performance Trends</span>
+                <span>Executive Summary</span>
+              </div>
+
+              <button type="button" class="view-report"
+                data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Executive_Overview.png"
+                data-title="01 — Executive Overview"
+                data-description="Service reliability is the primary performance concern, with on-time service at 55.7% against the 95% target. 
+              Fuel accounts for approximately 92% of the operating costs tracked in this report. Management should prioritize reducing delivery delays, 
+              investigating high-cost fleet operations, improving maintenance efficiency, and preventing safety incidents.
+              What this tells management is
+ Delivery performance is significantly below target,
+ Fuel expenditure is the largest tracked operating cost,
+Maintenance downtime and preventable incidents need focused attention.">
+                View full dashboard ↗
+              </button>
+            </div>
+          </article>
+
+
+          <!-- PAGE 02 -->
+          <article class="gallery-card">
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Delivery_Service_Reliability.png"
+              data-title="02 — Delivery Performance"
+              data-description="This report page focuses on delivery reliability and operational performance. It helps evaluate on-time delivery, delayed shipments, and performance patterns so that potential bottlenecks can be investigated."
+              aria-label="Enlarge Delivery Performance dashboard">
+
+              <img
+                src="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Delivery_Service_Reliability.png"
+                alt="Power BI Delivery Performance dashboard"
+                loading="lazy">
+
+              <span class="image-overlay">⌕ Click to enlarge</span>
+            </button>
+
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span class="page-number">PAGE 02</span>
+                <span class="page-type">Delivery Operations</span>
+              </div>
+
+              <h3>Delivery Performance</h3>
+
+              <p>
+                Analyzes delivery reliability, delays, and delivery trends
+                to highlight potential service-performance issues.
+              </p>
+
+              <div class="metric-list">
+                <span>On-Time Delivery</span>
+                <span>Delivery Delays</span>
+                <span>Trend Analysis</span>
+              </div>
+
+              <button type="button" class="view-report"
+                data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Delivery_Service_Reliability.png"
+                data-title="02 — Delivery Performance"
+                data-description="On-time service is 55.7%, which is 39.3 percentage points below the 95% target. Delivery on-time performance (44.6%) is weaker than pickup on-time performance (66.7%). 
+                With approximately 76K late events and 260.6K detention hours, management should investigate facility delays, high-delay routes, 
+                and customers receiving frequent late deliveries.Business actions to be taken are review detention causes at high-burden facilities, 
+                investigate recurring route delays, and work with operations teams to improve delivery commitments.">
+                View full dashboard ↗
+              </button>
+            </div>
+          </article>
+
+
+          <!-- PAGE 03 -->
+          <article class="gallery-card">
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Fleet_&_Fuel_Efficiency.png"
+              data-title="03 — Fleet and Fuel"
+              data-description="The fleet and fuel report examines vehicle utilization and fuel efficiency. Its purpose is to help identify consumption patterns, compare fleet performance, and investigate opportunities to improve operational efficiency."
+              aria-label="Enlarge Fleet and Fuel dashboard">
+
+              <img
+                src="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Fleet_&_Fuel_Efficiency.png"
+                alt="Power BI Fleet and Fuel dashboard"
+                loading="lazy">
+
+              <span class="image-overlay">⌕ Click to enlarge</span>
+            </button>
+
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span class="page-number">PAGE 03</span>
+                <span class="page-type">Fleet Operations</span>
+              </div>
+
+              <h3>Fleet and Fuel</h3>
+
+              <p>
+                Examines fleet utilization and fuel consumption to support
+                efficiency monitoring and operational cost analysis.
+              </p>
+
+              <div class="metric-list">
+                <span>Fleet Utilization</span>
+                <span>Fuel Efficiency</span>
+                <span>Consumption Analysis</span>
+              </div>
+
+              <button type="button" class="view-report"
+                data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Fleet_&_Fuel_Efficiency.png"
+                data-title="03 — Fleet and Fuel"
+                data-description="The fleet incurred $95.59M in fuel costs across 122.16M miles, with an average fuel efficiency of 6.45 MPG and a fuel cost of $0.78 per mile.
+                 MPG and idle-time differences across the selected trucks are relatively small, so fuel cost per mile is a useful additional measure for prioritizing vehicles for investigation.Business actions to be taken are investigate high-cost-per-mile trucks, 
+                 review idle-time patterns, and compare fuel performance across vehicles before recommending maintenance or operating changes.">
+                View full dashboard ↗
+              </button>
+            </div>
+          </article>
+
+
+          <!-- PAGE 04 -->
+          <article class="gallery-card">
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Maintenance_&_Fleet_Reliability.png"
+              data-title="04 — Maintenance"
+              data-description="The maintenance report provides visibility into maintenance activity, vehicle downtime, and related operational patterns. It supports investigation of recurring maintenance needs and their possible impact on fleet availability."
+              aria-label="Enlarge Maintenance dashboard">
+
+              <img
+                src="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Maintenance_&_Fleet_Reliability.png"
+                alt="Power BI Maintenance dashboard"
+                loading="lazy">
+
+              <span class="image-overlay">⌕ Click to enlarge</span>
+            </button>
+
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span class="page-number">PAGE 04</span>
+                <span class="page-type">Vehicle Maintenance</span>
+              </div>
+
+              <h3>Maintenance</h3>
+
+              <p>
+                Monitors maintenance activities and downtime to help assess
+                vehicle availability and maintenance-related issues.
+              </p>
+
+              <div class="metric-list">
+                <span>Maintenance Trends</span>
+                <span>Vehicle Downtime</span>
+                <span>Fleet Availability</span>
+              </div>
+
+              <button type="button" class="view-report"
+                data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Maintenance_&_Fleet_Reliability.png"
+                data-title="04 — Maintenance"
+                data-description="Total maintenance cost is $5.73M, including $4.45M in parts and $1.28M in labor. The fleet recorded approximately 72.23K downtime hours across 3K maintenance events, with average downtime of 24.74 hours per event.
+                 Management should examine high-cost trucks, vehicles with prolonged downtime, and the maintenance categories contributing most to expenditure.Business actions to be taken are review recurring repairs, investigate high-downtime vehicles, and assess whether preventive maintenance can reduce avoidable downtime and repair costs.">
+                View full dashboard ↗
+              </button>
+            </div>
+          </article>
+
+
+          <!-- PAGE 05 -->
+          <article class="gallery-card">
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Safety_Operational_Risk.png"
+              data-title="05 — Safety Analytics"
+              data-description="The safety analytics page brings safety-related indicators into a structured reporting view. It helps stakeholders examine recorded incidents and patterns, identify areas of concern, and support further investigation."
+              aria-label="Enlarge Safety Analytics dashboard">
+
+              <img
+                src="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Safety_Operational_Risk.png"
+                alt="Power BI Safety Analytics dashboard"
+                loading="lazy">
+
+              <span class="image-overlay">⌕ Click to enlarge</span>
+            </button>
+
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span class="page-number">PAGE 05</span>
+                <span class="page-type">Operational Safety</span>
+              </div>
+
+              <h3>Safety Analytics</h3>
+
+              <p>
+                Presents safety indicators and recorded incident patterns
+                to support operational risk monitoring.
+              </p>
+
+              <div class="metric-list">
+                <span>Safety KPIs</span>
+                <span>Incident Analysis</span>
+                <span>Risk Monitoring</span>
+              </div>
+
+              <button type="button" class="view-report"
+                data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Safety_Operational_Risk.png"
+                data-title="05 — Safety Analytics"
+                data-description="The fleet recorded 170 safety incidents, of which 64 (37.6%) were preventable, alongside 33 injury incidents and $2.65M in claim amounts. DOT violations are the most frequent incident category at 39 incidents. 
+                Management should prioritize preventable-incident reduction, investigate repeated truck incidents, and review drivers and cases associated with higher claim amounts.
+                Business actions to be taken are strengthen safety training, investigate recurring incident patterns, review vehicle inspection practices, and assess high-value claims to identify preventive opportunities.">
+                View full dashboard ↗
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         DATA MODEL
+    ========================== -->
+
+    <section id="data-model">
+      <div class="wrap">
+
+        <div class="section-heading">
+          <span class="tag">04 / DATA ARCHITECTURE</span>
+          <h2>Data Model &amp; <span class="grad">Relationships</span></h2>
+          <p>
+            A structured data model supports consistent calculations,
+            meaningful analysis, and reliable reporting.
+          </p>
+        </div>
+
+        <div class="model-layout">
+
+          <div class="model-preview">
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Datamodel_ss1.png"
+              data-title="Power BI Data Model"
+              data-description="The data model illustrates the relationships between the project's tables. A star-schema approach and validated primary and foreign key relationships help organize the data for analytical reporting."
+              aria-label="Enlarge Power BI data model">
+
+              <img
+                src="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Datamodel_ss1.png"
+                alt="Logistics Analytics Power BI data model"
+                loading="lazy">
+
+              <span class="image-overlay">⌕ Enlarge data model</span>
+            </button>
+
+          </div>
+
+          <div class="model-copy">
+            <span class="tag">STAR SCHEMA</span>
+
+            <h3>Designed for Analytical Reporting</h3>
+
+            <p>
+              SQL Server tables and reporting views were organized to support
+              Power BI analysis. The model was designed around clear table
+              relationships and reusable analytical measures.
+            </p>
+
+            <ul class="feature-list">
+              <li>
+                <span class="check">✦</span>
+                <span>Structured fact and dimension modelling.</span>
+              </li>
+              <li>
+                <span class="check">✦</span>
+                <span>Primary key and foreign key relationship validation.</span>
+              </li>
+              <li>
+                <span class="check">✦</span>
+                <span>SQL Server data preparation and reporting views.</span>
+              </li>
+              <li>
+                <span class="check">✦</span>
+                <span>Power Query transformations and DAX calculations.</span>
+              </li>
+            </ul>
+
+            <button
+              type="button"
+              class="btn ghost"
+              style="margin-top:23px"
+              data-image="C:\Users\neeth\Downloads\NITHYAPORT\logistics\Screenshots\Datamodel_ss1.png"
+              data-title="Power BI Data Model"
+              data-description="The data model illustrates the relationships between the project's tables. A star-schema approach and validated primary and foreign key relationships help organize the data for analytical reporting.">
+              Explore Data Model ↗
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         DAX MEASURES
+    ========================== -->
+
+    <section id="dax">
+      <div class="wrap">
+
+        <div class="section-heading">
+          <span class="tag">05 / ANALYTICS</span>
+          <h2>DAX &amp; <span class="grad">KPI Development</span></h2>
+          <p>
+            Developed 30+ DAX measures to support KPI calculations,
+            comparisons, and interactive analysis across the report pages.
+          </p>
+        </div>
+
+        <div class="dax-grid">
+
+          <article class="dax-card">
+            <h3>Delivery KPIs</h3>
+            <p>
+              Measures supporting delivery reliability, on-time performance,
+              and shipment-delay analysis.
+            </p>
+            <span class="dax-label">Delivery Analytics</span>
+          </article>
+
+          <article class="dax-card">
+            <h3>Fleet &amp; Fuel KPIs</h3>
+            <p>
+              Measures supporting fleet utilization, fuel consumption,
+              and efficiency comparisons.
+            </p>
+            <span class="dax-label">Fleet Analytics</span>
+          </article>
+
+          <article class="dax-card">
+            <h3>Maintenance KPIs</h3>
+            <p>
+              Measures supporting maintenance reporting, downtime analysis,
+              and fleet availability monitoring.
+            </p>
+            <span class="dax-label">Maintenance Analytics</span>
+          </article>
+
+          <article class="dax-card">
+            <h3>Safety KPIs</h3>
+            <p>
+              Measures supporting analysis of safety indicators and
+              recorded operational incidents.
+            </p>
+            <span class="dax-label">Safety Analytics</span>
+          </article>
+
+          <article class="dax-card">
+            <h3>Trend Analysis</h3>
+            <p>
+              Calculations supporting comparisons across available dates,
+              categories, and operational dimensions.
+            </p>
+            <span class="dax-label">Time-Based Analysis</span>
+          </article>
+
+          <article class="dax-card">
+            <h3>Interactive Reporting</h3>
+            <p>
+              Measures and report interactions that help users explore
+              operational performance from different perspectives.
+            </p>
+            <span class="dax-label">Business Intelligence</span>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         BUSINESS INSIGHTS
+    ========================== -->
+
+    <section id="insights">
+      <div class="wrap">
+
+        <div class="section-heading">
+          <span class="tag">06 / BUSINESS VALUE</span>
+          <h2>Business Questions &amp; <span class="grad">Insights</span></h2>
+          <p>
+            The dashboards provide a foundation for investigating
+            operational performance and supporting informed decisions.
+          </p>
+        </div>
+
+        <div class="insights-grid">
+
+          <article class="insight-card">
+            <div class="insight-icon">↗</div>
+            <div>
+              <h3>Delivery Reliability</h3>
+              <p>
+                Identify delivery delays and examine performance patterns
+                that may affect service reliability.
+              </p>
+            </div>
+          </article>
+
+          <article class="insight-card">
+            <div class="insight-icon">◈</div>
+            <div>
+              <h3>Fleet &amp; Fuel Efficiency</h3>
+              <p>
+                Examine fleet usage and fuel-consumption patterns to
+                investigate potential efficiency improvements.
+              </p>
+            </div>
+          </article>
+
+          <article class="insight-card">
+            <div class="insight-icon">⚙</div>
+            <div>
+              <h3>Maintenance Planning</h3>
+              <p>
+                Explore maintenance activity and downtime patterns that
+                may affect vehicle availability.
+              </p>
+            </div>
+          </article>
+
+          <article class="insight-card">
+            <div class="insight-icon">◎</div>
+            <div>
+              <h3>Safety Monitoring</h3>
+              <p>
+                Review safety indicators and recorded incidents to
+                identify areas for additional investigation.
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         PROJECT CTA
+    ========================== -->
+
+    <section id="contact">
+      <div class="wrap">
+
+        <div class="project-cta">
+          <span class="tag">EXPLORE THE PROJECT</span>
+
+          <h2>Built with <span class="grad">Power BI &amp; SQL Server</span></h2>
+
+          <p>
+            This project demonstrates an end-to-end analytics workflow,
+            from data preparation and modelling to DAX development and
+            interactive dashboard design.
+          </p>
+
+          <div class="cta-buttons">
+
+            <!-- Replace # with your actual GitHub repository URL -->
+            <a
+              href="https://github.com/Nithya-A/Logistics-Analytics-Power-Bi"
+              class="btn primary"
+              target="_blank"
+              rel="noopener noreferrer">
+              View GitHub Repository ↗
+            </a>
+
+            <a href="#dashboards" class="btn ghost">
+              Back to Dashboards ↑
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© <span id="current-year"></span> Nithya A</span>
+      <span>Power BI Developer · Data Analyst</span>
+      <a class="back-top" href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+
+  <!-- =========================
+       IMAGE POPUP / LIGHTBOX
+  ========================== -->
+
+  <div
+    class="lightbox"
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-title"
+    aria-hidden="true">
+
+    <div class="lightbox-dialog">
+
+      <div class="lightbox-header">
+        <h2 id="lightbox-title">Dashboard Preview</h2>
+
+        <button
+          type="button"
+          class="close-lightbox"
+          id="close-lightbox"
+          aria-label="Close image preview">
+          ×
+        </button>
+      </div>
+
+      <div class="lightbox-image-wrap">
+
+        <img id="lightbox-image" src="" alt="Expanded dashboard screenshot">
+
+        <div class="image-fallback" id="lightbox-fallback">
+          <strong>Screenshot not found</strong>
+          <span>Please check that the image is in the correct folder.</span>
+          <small id="missing-image-name"></small>
+        </div>
+
+      </div>
+
+      <div class="lightbox-description">
+        <strong id="lightbox-description-title">About this report</strong>
+        <p id="lightbox-description-text"></p>
+        <p class="lightbox-hint">
+          Press Esc or click × to close this preview.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+       INCLUDED IN THIS FILE
+  ========================== -->
+
+  <script>
+    // Automatically update the footer year.
+    document.getElementById("current-year").textContent =
+      new Date().getFullYear();
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const lightboxTitle = document.getElementById("lightbox-title");
+    const descriptionTitle =
+      document.getElementById("lightbox-description-title");
+    const descriptionText =
+      document.getElementById("lightbox-description-text");
+    const closeButton = document.getElementById("close-lightbox");
+    const fallback = document.getElementById("lightbox-fallback");
+    const missingImageName =
+      document.getElementById("missing-image-name");
+
+    let previouslyFocusedElement = null;
+
+    // Open the enlarged image popup.
+    function openLightbox(button) {
+      const imagePath = button.dataset.image;
+      const title = button.dataset.title || "Dashboard Preview";
+      const description =
+        button.dataset.description || "Power BI project screenshot.";
+
+      if (!imagePath) return;
+
+      previouslyFocusedElement = document.activeElement;
+
+      lightboxTitle.textContent = title;
+      descriptionTitle.textContent = title;
+      descriptionText.textContent = description;
+
+      fallback.style.display = "none";
+      missingImageName.textContent = "";
+
+      lightboxImage.style.display = "block";
+      lightboxImage.alt = title;
+
+      // Remove the old source before assigning the new image.
+      lightboxImage.removeAttribute("src");
+      lightboxImage.src = imagePath;
+
+      lightbox.classList.add("active");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+
+      closeButton.focus();
+    }
+
+    // Close the popup and restore focus.
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+
+      lightboxImage.removeAttribute("src");
+
+      if (
+        previouslyFocusedElement &&
+        typeof previouslyFocusedElement.focus === "function"
+      ) {
+        previouslyFocusedElement.focus();
+      }
+    }
+
+    // Both the image and the "View full dashboard" link open the same popup.
+    document.querySelectorAll("[data-image]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        openLightbox(button);
+      });
+    });
+
+    closeButton.addEventListener("click", closeLightbox);
+
+    // Clicking the dark background closes the popup.
+    lightbox.addEventListener("click", function (event) {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // Escape closes the popup.
+    document.addEventListener("keydown", function (event) {
+      if (
+        event.key === "Escape" &&
+        lightbox.classList.contains("active")
+      ) {
+        closeLightbox();
+      }
+    });
+
+    // Show a helpful message if a screenshot path is incorrect.
+    lightboxImage.addEventListener("error", function () {
+      lightboxImage.style.display = "none";
+      fallback.style.display = "flex";
+      missingImageName.textContent =
+        "Expected file: " + lightboxImage.getAttribute("src");
+    });
+
+    lightboxImage.addEventListener("load", function () {
+      lightboxImage.style.display = "block";
+      fallback.style.display = "none";
+    });
+  </script>
+
+</body>
+</html>
